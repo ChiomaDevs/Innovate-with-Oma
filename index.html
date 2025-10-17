@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 
-  <style>
+<style>
     :root{
       --brand-primary: #7C3AED; /* {{brand_primary_hex}} */
       --brand-secondary:#10B981; /* {{brand_secondary_hex}} */
@@ -52,7 +52,14 @@
     .tagline{display:flex;gap:12px;align-items:center;margin:10px 0 16px}
     .tagline small{color:#334155}
     .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
-    .hero-img{width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow)}
+-   .hero-img{width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow)}
++   /* hero image: fixed min-height, cover behavior and a fallback placeholder */
++   .hero-img{width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);min-height:260px;position:relative;background:linear-gradient(180deg,#f3f6ff,#ffffff)}
++   .hero-img img{width:100%;height:100%;display:block;object-fit:cover}
++   /* placeholder state when image fails to load */
++   .hero-img .placeholder-content{display:none;width:100%;height:100%;align-items:center;justify-content:center;gap:12px;flex-direction:column;color:#0b1020}
++   .hero-img.hero-placeholder{background:linear-gradient(90deg,var(--brand-primary),var(--brand-secondary));color:#fff;display:flex;align-items:center;justify-content:center}
++   .hero-img.hero-placeholder .placeholder-content{display:flex}
     .section{padding:70px 0}
     .grid{display:grid;gap:20px}
     .cards{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
@@ -68,7 +75,7 @@
     .faq details{border:1px solid var(--border);border-radius:var(--radius);padding:14px;background:#fff}
     .faq details+details{margin-top:10px}
     .hide{display:none}
-
+ 
     /* Simple responsive tweaks */
     @media (max-width: 900px){
       .hero-wrap{grid-template-columns:1fr}
@@ -116,9 +123,23 @@
           <small>Trusted by busy professionals, parents, and students.</small>
         </div>
       </div>
-      <figure class="hero-img">
-        <img src="./assets/hero.jpg" alt="People learning together in a bright workspace, using laptops and notes" style="width:100%;height:auto;display:block" loading="lazy" />
-      </figure>
+     // ...existing code...
+<figure class="hero-img">
+  <!-- image tries to load; on error we hide it and switch the figure to a placeholder state -->
+  <img src="./assets/hero.jpg"
+       alt="People learning together in a bright workspace, using laptops and notes"
+       loading="lazy"
+       onerror="this.style.display='none'; this.parentNode.classList.add('hero-placeholder');" />
+  <!-- simple fallback content shown when image fails -->
+  <div class="placeholder-content" aria-hidden="true">
+    <svg width="84" height="84" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect width="24" height="24" rx="4" fill="white" opacity="0.12"/>
+      <path d="M4 7h16M4 12h12M4 17h8" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    <div style="font-weight:700">Workshop snapshot</div>
+  </div>
+</figure>
+// ...existing code...
     </div>
   </header>
 
